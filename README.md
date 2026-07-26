@@ -27,7 +27,7 @@ graph TD
 ## ⚙️ Hardware & Stack Requirements
 - Package & Env Management: uv
 - Local LLM Engine: Ollama
-- Target GPU: Optimized for GPUs with ≥8GB VRAM (e.g., RTX 3060 / 4060).
+- Target GPU: Optimized for GPUs with ≥8GB VRAM (e.g., RTX 4060).
 
 
 ## 🚀 Quickstart
@@ -36,7 +36,7 @@ Pull the recommended models via Ollama:
 
 ```shell
 # Auditor Agent (Specialized in code logic & schema reasoning)
-ollama pull qwen2.5-coder:7b
+ollama pull qwen2.5:7b
 
 # Engineer Agent (Ultra-fast code generation)
 ollama pull llama3.2:3b
@@ -50,7 +50,7 @@ uv sync
 
 ### 3. Run the Agentic Swarm Pipeline
 ```
-uv run src.main
+uv run python -m src.main
 ```
 
 
@@ -58,7 +58,7 @@ uv run src.main
 All pipeline variables can be adjusted in src/config.py:
 
 ```{python}
-AUDITOR_MODEL = "qwen2.5-coder:7b"
+AUDITOR_MODEL = "qwen2.5:7b"
 ENGINEER_MODEL = "llama3.2:3b"
 OLLAMA_TEMPERATURE = 0.0
 MAX_RETRIES = 3
