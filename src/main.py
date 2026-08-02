@@ -59,24 +59,21 @@ def main():
     data_summary = prepare_data_preview(raw_df)
 
     initial_state: SwarmState = {
-        "df": raw_df,  # Hold actual DataFrame in memory
         "file_path": str(target_csv),
         "data_preview": data_summary,
         "issues_found": "",
         "generated_code": "",
-        "error_log": None,
+        "error_log": [],
         "retry_count": 0,
         "status": "processing",
     }
 
-    print("🤖 Initializing Scrub Swarm Pipeline...")
+    print("🤖 Initializing Tidy Swarm Pipeline...")
     app = build_graph()
     final_state = app.invoke(initial_state)
 
     print("\n-------------------------------------------")
     print(f"🏁 Execution Finished: STATUS = {final_state['status'].upper()}")
-    if final_state["status"] == "success":
-        print(f"Cleaned DataFrame Shape: {final_state['df'].shape}")
     print("-------------------------------------------")
 
 

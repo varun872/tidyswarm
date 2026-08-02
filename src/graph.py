@@ -12,10 +12,12 @@ def route_next_step(state: SwarmState) -> str:
         return END
 
     if state.get("retry_count", 0) >= MAX_RETRIES:
-        print(f"\n🛑 Pipeline terminated: Exceeded maximum repair attempts ({MAX_RETRIES}).")
+        print(f"🛑 Pipeline terminated: Exceeded maximum repair attempts ({MAX_RETRIES}).")
+        print(f"❗ Error Log: {state.get('error_log', 'No error log available.')}")
         return END
 
-    print(f"\n🔄 Code execution failed. Looping back to Auditor with error logs (Attempt {state.get('retry_count')} of {MAX_RETRIES})...")
+    print(f"🔄 Code execution failed. Looping back to Auditor with error logs (Attempt {state.get('retry_count')} of {MAX_RETRIES})...")
+    print(f"❗ Error Log: {state.get('error_log', 'No error log available.')}")
     return "auditor"
 
 

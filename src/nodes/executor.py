@@ -8,7 +8,7 @@ def code_executor(state: SwarmState) -> dict:
     The Executor agent runs the generated Pandas code to clean the dataset.
     It updates the state with the cleaned dataset and any error logs if execution fails.
     """
-    print("\n🚀 [Node 3: Executor] Running code directly on memory DataFrame...")
+    print("🚀 [Node 3: Executor] Running code directly on memory DataFrame...")
     code_raw = state.get("generated_code", "")
 
     # Extract code from markdown fences (handles ```python ... ``` or generic ``` ... ```)
@@ -19,18 +19,15 @@ def code_executor(state: SwarmState) -> dict:
     if not match:
         print("❌ Failed to parse Python code block.")
         return {
-            "error_log": "SyntaxError: No markdown code block (```python ... ```) found in response.",
+            "error_log": ["SyntaxError: No markdown code block (```python ... ```) found."],
             "status": "failed",
         }
 
     pure_code = match.group(1).strip()
 
-    # Initialize an empty error log
-    error_log = None
-
     try:
         # Create a deep copy of the DataFrame for safe execution
-        working_df = state["df"].copy()
+        working_df = pd.read_csv(state.get("file_path", str(DEFAULT_CLEANED_CSV)))
 
         # Prepare an isolated local execution scope
         local_vars = {"df": working_df, "pd": pd}
@@ -47,23 +44,21 @@ def code_executor(state: SwarmState) -> dict:
         output_file = input_path.replace(".csv", "_cleaned.csv")
         cleaned_df.to_csv(output_file, index=False)
 
-        print(
-            f"🎉 Cleaning Succeeded! Clean DataFrame updated in state ({len(cleaned_df)} rows)."
-        )
+        print(f"🎉 Cleaning Succeeded!")
         print(f"💾 Output saved to: '{output_file}'")
 
         return {
-            "df": cleaned_df,  # Update the DataFrame object directly in state!
             "status": "success",
-            "error_log": None,
+            "error_log": [],
         }
 
     except Exception as e:
         # Capture any errors during execution
-        error_log = str(e)
+        err_msg = f"Attempt {state.get('retry_count', 1)} Failed: {type(e).__name__}: {str(e)}"
+        print(f"⚠️ Execution Error Caught: {err_msg}")
 
         # Update the state with failure status and error log
         return {
             "status": "failed",
-            "error_log": error_log
+            "error_log": [err_msg]
         }

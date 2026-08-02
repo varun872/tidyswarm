@@ -12,7 +12,7 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # Ollama Settings
 AUDITOR_MODEL = "qwen2.5:7b"
-ENGINEER_MODEL = "llama3.2:3b"
+ENGINEER_MODEL = "qwen2.5:7b"
 TEMPARATURE = 0.0
 
 # Graph Settings

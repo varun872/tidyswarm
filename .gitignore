@@ -1,5 +1,9 @@
 # Project environment
 .venv
 
+# Python Cache
+**/__pycache__/
+
 # Data
 data/
+!data/.gitkeep
