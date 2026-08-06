@@ -11,17 +11,18 @@ An autonomous, fully offline, multi-agent data preprocessing pipeline powered by
 ```mermaid
 graph TD
     CSV[("📂 raw_messy_data.csv")] --> Profiler["📊 Dataset Profiler"]
-    Profiler --> State["💾 SwarmState (Memory DataFrame)"]
+    Profiler --> State["💾 SwarmState (File Paths & Metadata)"]
 
     subgraph Swarm ["🧼 Tidy Swarm State Machine"]
         State --> Node1["🔍 Node 1: Auditor Agent (Qwen 2.5)"]
         Node1 -->|"Audit Report"| Node2["⚙️ Node 2: Engineer Agent (Qwen 2.5)"]
         Node2 -->|"Pandas Code"| Node3["🚀 Node 3: Python Executor"]
         Node3 --> Router{"Status Check"}
+        Router -->|"Success"| Node4["📊 Node 4: Validator Node"]
     end
 
-    Router -->|"Success"| Output[("✅ raw_messy_data_cleaned.csv")]
     Router -->|"Runtime Error"| Node1
+    Node4 -->|"Diff Report & Cleaned Data"| Output[("✅ raw_messy_data_cleaned.csv")]
 ```
 
 ## ⚙️ Hardware & Stack Requirements

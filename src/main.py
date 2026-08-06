@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 
-from src.config import DEFAULT_RAW_CSV, VALUE_COUNTS_TOP_N
+from src.config import RAW_CSV, CLEANED_CSV, VALUE_COUNTS_TOP_N
 from src.graph import build_graph
 from src.state import SwarmState
 from src.utils.generate_data import generate_messy_dataset
@@ -41,31 +41,37 @@ def prepare_data_preview(df: pd.DataFrame) -> str:
 
 
 def main():
-    target_csv = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_RAW_CSV
+    input_csv = Path(sys.argv[1]) if len(sys.argv) > 1 else RAW_CSV
+    output_csv = Path(sys.argv[2]) if len(sys.argv) > 2 else CLEANED_CSV
 
     # Auto-generate messy dummy file if default path doesn't exist yet
-    if not target_csv.exists() and target_csv == DEFAULT_RAW_CSV:
+    if not input_csv.exists() and input_csv == RAW_CSV:
         print("ℹ️ No target CSV found. Generating messy dummy dataset...")
-        generate_messy_dataset(str(target_csv))
+        generate_messy_dataset(str(input_csv))
 
-    if not target_csv.exists():
-        print(f"❌ Error: Target file '{target_csv}' does not exist.")
+    if not input_csv.exists():
+        print(f"❌ Error: Target file '{input_csv}' does not exist.")
         sys.exit(1)
 
-    print(f"📂 Loading dataset: '{target_csv}'...")
-    raw_df = pd.read_csv(target_csv)
+    if output_csv.exists():
+        print(f"⚠️ Warning: Output file '{output_csv}' already exists and will be overwritten.")
+
+    print(f"📂 Loading dataset: '{input_csv}'...")
+    raw_df = pd.read_csv(input_csv)
 
     print("📊 Profiling dataset structure...")
     data_summary = prepare_data_preview(raw_df)
 
     initial_state: SwarmState = {
-        "file_path": str(target_csv),
+        "input_file_path": str(input_csv),
+        "output_file_path": str(output_csv),
         "data_preview": data_summary,
         "issues_found": "",
         "generated_code": "",
         "error_log": [],
         "retry_count": 0,
         "status": "processing",
+        "validation_report": None,
     }
 
     print("🤖 Initializing Tidy Swarm Pipeline...")

@@ -7,7 +7,7 @@ def data_auditor(state: SwarmState) -> dict:
     The Auditor agent inspects the dataset and identifies issues.
     It updates the state with an audit log of findings.
     """
-    print(f"🔍 [Node 1: Auditor Agent ({AUDITOR_MODEL})] Inspecting data...")
+    print(f"\n🔍 [Node 1: Auditor Agent ({AUDITOR_MODEL})] Inspecting data...")
 
     current_retry = state.get("retry_count", 0)
 

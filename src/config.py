@@ -4,8 +4,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
 # Default File Locations
-DEFAULT_RAW_CSV = DATA_DIR / "raw_messy_data.csv"
-DEFAULT_CLEANED_CSV = DATA_DIR / "raw_messy_data_cleaned.csv"
+RAW_CSV = DATA_DIR / "raw_messy_data.csv"
+CLEANED_CSV = DATA_DIR / "raw_messy_data_cleaned.csv"
 
 # Ensure data directory exists on import
 DATA_DIR.mkdir(parents=True, exist_ok=True)

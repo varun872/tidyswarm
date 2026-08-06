@@ -7,7 +7,7 @@ def code_engineer(state: SwarmState) -> dict:
     The Engineer agent generates Pandas code to clean the dataset based on the audit log.
     It updates the state with the generated cleaning code.
     """
-    print(f"⚙️ [Node 2: Engineer Agent ({ENGINEER_MODEL})] Generating Pandas code...")
+    print(f"\n⚙️ [Node 2: Engineer Agent ({ENGINEER_MODEL})] Generating Pandas code...")
 
     # Initialize the Ollama model for engineering
     engineer_llm = OllamaLLM(model=ENGINEER_MODEL, temperature=TEMPARATURE)

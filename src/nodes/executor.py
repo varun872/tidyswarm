@@ -1,14 +1,13 @@
 import re
 import pandas as pd
 from src.state import SwarmState
-from src.config import DEFAULT_CLEANED_CSV
 
 def code_executor(state: SwarmState) -> dict:
     """
     The Executor agent runs the generated Pandas code to clean the dataset.
     It updates the state with the cleaned dataset and any error logs if execution fails.
     """
-    print("🚀 [Node 3: Executor] Running code directly on memory DataFrame...")
+    print("\n🚀 [Node 3: Executor] Running code directly on memory DataFrame...")
     code_raw = state.get("generated_code", "")
 
     # Extract code from markdown fences (handles ```python ... ``` or generic ``` ... ```)
@@ -24,10 +23,12 @@ def code_executor(state: SwarmState) -> dict:
         }
 
     pure_code = match.group(1).strip()
+    input_file = state["input_file_path"]
+    output_file = state["output_file_path"]
 
     try:
         # Create a deep copy of the DataFrame for safe execution
-        working_df = pd.read_csv(state.get("file_path", str(DEFAULT_CLEANED_CSV)))
+        working_df = pd.read_csv(input_file)
 
         # Prepare an isolated local execution scope
         local_vars = {"df": working_df, "pd": pd}
@@ -40,8 +41,6 @@ def code_executor(state: SwarmState) -> dict:
             raise ValueError("Execution finished, but 'df' was removed or lost.")
 
         # Determine output path and save cleaned output CSV
-        input_path = state.get("file_path", str(DEFAULT_CLEANED_CSV))
-        output_file = input_path.replace(".csv", "_cleaned.csv")
         cleaned_df.to_csv(output_file, index=False)
 
         print(f"🎉 Cleaning Succeeded!")
