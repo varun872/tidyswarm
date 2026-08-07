@@ -54,7 +54,7 @@ def main():
         sys.exit(1)
 
     if output_csv.exists():
-        print(f"⚠️ Warning: Output file '{output_csv}' already exists and will be overwritten.")
+        print(f"⚠️  Warning: Output file '{output_csv}' already exists and will be overwritten.")
 
     print(f"📂 Loading dataset: '{input_csv}'...")
     raw_df = pd.read_csv(input_csv)

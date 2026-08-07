@@ -16,19 +16,19 @@ graph TD
     subgraph Swarm ["🧼 Tidy Swarm State Machine"]
         State --> Node1["🔍 Node 1: Auditor Agent (Qwen 2.5)"]
         Node1 -->|"Audit Report"| Node2["⚙️ Node 2: Engineer Agent (Qwen 2.5)"]
-        Node2 -->|"Pandas Code"| Node3["🚀 Node 3: Python Executor"]
+        Node2 -->|"Pandas Code"| Node3["🚀 Node 3: Python Executor + AST Guardrails"]
         Node3 --> Router{"Status Check"}
         Router -->|"Success"| Node4["📊 Node 4: Validator Node"]
     end
 
-    Router -->|"Runtime Error"| Node1
+    Router -->|"Runtime Error / Security Violation"| Node1
     Node4 -->|"Diff Report & Cleaned Data"| Output[("✅ raw_messy_data_cleaned.csv")]
 ```
 
 ## ⚙️ Hardware & Stack Requirements
 - Package & Env Management: uv
 - Local LLM Engine: Ollama
-- Target GPU: Optimized for GPUs with ≥8GB VRAM (e.g., RTX 4060).
+- Target GPU: Optimized for GPUs with ≥8GB VRAM (e.g. RTX 4060).
 
 
 ## 🚀 Quickstart

@@ -1,6 +1,7 @@
 import re
 import pandas as pd
 from src.state import SwarmState
+from src.utils.security import validate_code_security, CodeSecurityError
 
 def code_executor(state: SwarmState) -> dict:
     """
@@ -25,6 +26,18 @@ def code_executor(state: SwarmState) -> dict:
     pure_code = match.group(1).strip()
     input_file = state["input_file_path"]
     output_file = state["output_file_path"]
+
+    # 1. AST SECURITY INSPECTION STEP
+    try:
+        validate_code_security(pure_code)
+        print("🛡️  AST Security Check Passed: No disallowed imports or builtins detected.")
+    except CodeSecurityError as sec_err:
+        err_msg = f"Security Violation: {str(sec_err)}"
+        print(f"🚨  {err_msg}")
+        return {
+            "error_log": [err_msg],
+            "status": "failed",
+        }
 
     try:
         # Create a deep copy of the DataFrame for safe execution
@@ -54,7 +67,7 @@ def code_executor(state: SwarmState) -> dict:
     except Exception as e:
         # Capture any errors during execution
         err_msg = f"Attempt {state.get('retry_count', 1)} Failed: {type(e).__name__}: {str(e)}"
-        print(f"⚠️ Execution Error Caught: {err_msg}")
+        print(f"⚠️  Execution Error Caught: {err_msg}")
 
         # Update the state with failure status and error log
         return {

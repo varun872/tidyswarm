@@ -18,5 +18,9 @@ TEMPARATURE = 0.0
 # Graph Settings
 MAX_RETRIES = 3
 
-# 
-VALUE_COUNTS_TOP_N = 5  # Number of top unique values to display for categorical columns
+# Number of top unique values to display
+VALUE_COUNTS_TOP_N = 5
+
+# AST Security Whitelists
+ALLOWED_MODULES = {"pandas", "numpy", "re", "datetime", "math", "string"}
+FORBIDDEN_BUILTINS = {"eval", "exec", "open", "compile", "__import__", "globals", "locals", "getattr", "setattr", "delattr", "input", "exit", "quit"}
